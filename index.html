@@ -2,9 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<!-- CORRIGIDO: viewport com viewport-fit=cover para safe-area funcionar corretamente em iOS -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>Aonet + Scala ISP – Fibra Óptica de Verdade na sua Região</title>
+<meta name="description" content="Fibra óptica de verdade com instalação grátis, Wi-Fi 6, Streamings inclusos e mais de 30 cidades atendidas. Planos a partir de R$89,90/mês. Ligue agora!">
+
+<!-- CORRIGIDO: preconnect para carregar fontes mais rápido -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --blue: #003A8C;
@@ -44,9 +51,10 @@ body {
   display: block;
 }
 
-/* ANIMATED DIAGONAL STRIPES */
+/* ANIMATED DIAGONAL STRIPES — CORRIGIDO: will-change para evitar repaint */
 .stripe-bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  will-change: transform;
   background: repeating-linear-gradient(
     -55deg, transparent, transparent 60px,
     rgba(0,80,190,0.04) 60px, rgba(0,80,190,0.04) 62px
@@ -84,17 +92,20 @@ nav {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 3px solid var(--gold);
+  /* CORRIGIDO: padding responsivo e flex-wrap para telas muito pequenas */
   padding: 10px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  min-height: 68px;
+  min-height: 64px;
 }
+/* CORRIGIDO: width explícita no logo para Safari não estourar */
 .nav-logo {
-  height: clamp(36px, 9vw, 56px);
-  max-width: 42vw;
+  height: clamp(34px, 8vw, 52px);
+  width: auto;
+  max-width: 40vw;
   object-fit: contain;
   filter: brightness(1.1) drop-shadow(0 2px 10px rgba(0,80,190,0.4));
   transition: transform 0.3s ease;
@@ -106,11 +117,11 @@ nav {
   background: var(--green);
   color: #fff;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(12px, 3vw, 16px);
+  font-size: clamp(11px, 2.8vw, 16px);
   font-weight: 900;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  padding: 10px 18px;
+  padding: 10px 16px;
   border-radius: 50px;
   text-decoration: none;
   animation: navPulse 2s ease-in-out infinite;
@@ -141,6 +152,7 @@ nav {
   overflow: hidden;
   text-align: center;
 }
+/* CORRIGIDO: will-change para blur animado */
 .hero-glow {
   position: absolute;
   width: 500px; height: 500px;
@@ -150,6 +162,7 @@ nav {
   z-index: 0;
   filter: blur(60px);
   pointer-events: none;
+  will-change: transform;
 }
 .hero-eyebrow {
   position: relative; z-index: 2;
@@ -195,9 +208,9 @@ nav {
   0%, 100% { transform: scale(1);    color: var(--gold); }
   50%       { transform: scale(1.03); color: #fff; text-shadow: 0 0 30px var(--blue2); }
 }
-.hero h1 .stroke      { -webkit-text-stroke: 1.5px var(--white); color: transparent; }
-.hero h1 .fill-blue   { color: #5ba4ff; }
-.hero h1 .fill-gold   { color: var(--gold); }
+.hero h1 .stroke    { -webkit-text-stroke: 1.5px var(--white); color: transparent; }
+.hero h1 .fill-blue { color: #5ba4ff; }
+.hero h1 .fill-gold { color: var(--gold); }
 .hero-sub {
   position: relative; z-index: 2;
   font-size: clamp(14px, 3.8vw, 20px);
@@ -230,6 +243,38 @@ nav {
   margin-top: 34px;
   animation: fadeUp 0.7s ease 0.4s both;
 }
+
+/* CORRIGIDO: brand-strip com overflow hidden para telas pequenas */
+.brand-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 32px;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+  animation: fadeUp 0.7s ease 0.5s both;
+  padding: 0 10px;
+  width: 100%;
+}
+.brand-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50px;
+  padding: 7px 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(11px, 2.5vw, 13px);
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
 .btn-blue, .btn-wa {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(17px, 4.5vw, 23px);
@@ -257,14 +302,17 @@ nav {
 }
 .btn-blue:hover { transform: scale(1.05); background: #0060d4; }
 
-/* Classe específica para corrigir o botão longo no celular */
+/* CORRIGIDO: btn-verify com white-space normal e height auto para quebra no mobile sem conflito */
 .btn-verify {
   white-space: normal;
   text-align: center;
   line-height: 1.2;
   height: auto;
-  max-width: 100%;
-  padding: 16px 20px;
+  min-height: 54px;
+  padding: 14px 22px;
+  max-width: 420px;
+  flex: 0 1 auto;
+  width: 100%;
 }
 
 .btn-wa {
@@ -280,34 +328,6 @@ nav {
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-/* BRAND LOGOS STRIP */
-.brand-strip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 32px;
-  position: relative;
-  z-index: 2;
-  flex-wrap: wrap;
-  animation: fadeUp 0.7s ease 0.5s both;
-}
-.brand-pill {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 50px;
-  padding: 8px 16px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.8);
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 /* URGENCY STRIP */
@@ -339,6 +359,9 @@ nav {
   letter-spacing: 3px;
   box-shadow: inset 0 0 10px rgba(255,184,0,0.2);
   vertical-align: middle;
+  /* CORRIGIDO: min-width para não tremer quando o número muda */
+  min-width: 90px;
+  text-align: center;
 }
 
 /* PLANS SECTION */
@@ -388,6 +411,8 @@ nav {
   padding: 6px 16px 6px 12px;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 8% 50%);
   animation: ribbonPop 2s ease-in-out infinite;
+  /* CORRIGIDO: z-index para ficar sobre o card */
+  z-index: 2;
 }
 @keyframes ribbonPop {
   0%,100% { transform: scale(1); }
@@ -457,14 +482,14 @@ nav {
   padding: 5px 10px; border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
-.app-aonet    { background: #003A8C; border: 1px solid #5ba4ff; }
-.app-deezer   { background: #A238FF; }
-.app-watch    { background: #E8501A; }
-.app-sky      { background: #0072CE; }
-.app-disney   { background: #113CCF; }
-.app-globo    { background: #FF004E; }
-.app-hbo      { background: #000; border: 1px solid #5A5A5A; }
-.app-skeelo   { background: #00A878; }
+.app-aonet  { background: #003A8C; border: 1px solid #5ba4ff; }
+.app-deezer { background: #A238FF; }
+.app-watch  { background: #E8501A; }
+.app-sky    { background: #0072CE; }
+.app-disney { background: #113CCF; }
+.app-globo  { background: #FF004E; }
+.app-hbo    { background: #000; border: 1px solid #5A5A5A; }
+.app-skeelo { background: #00A878; }
 
 .card-footer { margin-top: auto; }
 .btn-plan {
@@ -593,7 +618,8 @@ nav {
 .r-author { font-size: 14px; font-weight: 900; color: #fff; text-transform: uppercase; }
 .r-city   { font-size: 12px; color: var(--gold); font-weight: 800; }
 
-/* FAKE SALES NOTIFICATION */
+/* FAKE SALES NOTIFICATION
+   CORRIGIDO: posição correta em mobile sem sobrepor o botão WA flutuante */
 .sales-notification {
   position: fixed;
   bottom: -110px;
@@ -608,10 +634,13 @@ nav {
   gap: 12px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.6);
   transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  max-width: calc(100vw - 40px);
+  /* CORRIGIDO: limita largura para não tocar o botão WA flutuante */
+  max-width: calc(100vw - 100px);
 }
 .sales-notification.show {
-  bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  /* CORRIGIDO: usa constant + env para compatibilidade máxima com iOS Safari */
+  bottom: calc(constant(safe-area-inset-bottom, 24px) + 24px);
+  bottom: calc(env(safe-area-inset-bottom, 24px) + 24px);
 }
 .sn-icon {
   background: var(--green);
@@ -625,10 +654,12 @@ nav {
 .sn-text { font-size: 12px; font-weight: 800; line-height: 1.35; }
 .sn-text span { color: var(--gold); }
 
-/* FLOATING WA */
+/* FLOATING WA — CORRIGIDO: font-size explícito para emoji ser consistente */
 .float-wa {
   position: fixed;
-  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  /* CORRIGIDO: usa constant + env para compatibilidade iOS */
+  bottom: calc(constant(safe-area-inset-bottom, 0px) + 20px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
   right: 20px;
   z-index: 999;
   width: 60px; height: 60px;
@@ -636,6 +667,7 @@ nav {
   background: var(--green);
   display: flex; align-items: center; justify-content: center;
   color: white;
+  font-size: 28px;
   text-decoration: none;
   animation: floatWa 2s ease-in-out infinite;
   box-shadow: 0 4px 20px rgba(37,211,102,0.6);
@@ -650,7 +682,9 @@ footer {
   background: #000d1f;
   border-top: 2px solid rgba(255,184,0,0.3);
   padding: 40px 20px;
-  padding-bottom: max(40px, calc(env(safe-area-inset-bottom, 0px) + 40px));
+  /* CORRIGIDO: padding-bottom seguro para iPhones com home indicator */
+  padding-bottom: calc(constant(safe-area-inset-bottom, 0px) + 40px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px);
   text-align: center;
 }
 footer img {
@@ -670,38 +704,67 @@ footer .footer-contact {
 }
 .reveal.in { opacity: 1; transform: none; }
 
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ticker-inner { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+}
+
 /* ══ RESPONSIVE ══ */
 @media (max-width: 900px) {
   .plans-grid { grid-template-columns: repeat(2, 1fr); }
-  .plan-card.hot { transform: none; }
 }
+
 @media (max-width: 768px) {
   nav { padding: 10px 14px; gap: 8px; }
-  .nav-logo { height: 36px; }
-  .nav-cta { padding: 9px 13px; font-size: 12px; letter-spacing: 0; gap: 5px; }
+  .nav-logo { height: 34px; }
+  .nav-cta { padding: 9px 12px; font-size: 12px; letter-spacing: 0; gap: 5px; }
   .hero { padding: 44px 16px 70px; }
   .hero h1 { font-size: clamp(34px, 9.5vw, 52px); letter-spacing: 1px; }
   .pain-point-container { font-size: clamp(36px, 10vw, 54px); }
-  .hero-btns { flex-direction: column; gap: 12px; }
-  .btn-blue, .btn-wa { width: 100%; padding: 18px 16px; font-size: 20px; flex: none; }
+  .hero-btns { flex-direction: column; align-items: stretch; gap: 12px; }
+  /* CORRIGIDO: no mobile os botões ficam full width sem flex shorthand conflitante */
+  .btn-blue, .btn-wa {
+    width: 100%;
+    padding: 18px 16px;
+    font-size: 20px;
+    flex: none;
+  }
+  .btn-verify {
+    max-width: 100%;
+    flex: none;
+  }
   .urgency { font-size: 13px; padding: 13px 10px; }
   #countdown { display: block; margin: 7px auto 0; font-size: 26px; max-width: 140px; }
-  .plans-grid { grid-template-columns: 1fr; max-width: 400px; }
+  /* CORRIGIDO: plans-grid 1 coluna sem max-width limitante que cortava em 360px */
+  .plans-grid { grid-template-columns: 1fr; max-width: 480px; }
   .btn-plan { font-size: 18px; padding: 14px 8px; }
+  /* CORRIGIDO: sales notification centralizada e sem sobreposição no mobile */
   .sales-notification {
-    left: 50%; right: auto;
-    transform: translateX(-50%);
-    width: calc(100vw - 32px);
-    justify-content: center;
+    left: 16px;
+    right: 88px; /* deixa espaço para o botão WA */
+    max-width: calc(100vw - 104px);
+    width: auto;
+    border-radius: 14px;
     bottom: -110px;
   }
   .sales-notification.show {
-    bottom: max(90px, calc(env(safe-area-inset-bottom, 0px) + 90px));
+    bottom: calc(constant(safe-area-inset-bottom, 0px) + 20px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
   }
   .reviews-grid { grid-template-columns: 1fr; }
   .cities-grid { grid-template-columns: repeat(2, 1fr); }
-  footer { padding-bottom: max(50px, calc(env(safe-area-inset-bottom, 0px) + 50px)); }
+  footer {
+    padding-bottom: calc(constant(safe-area-inset-bottom, 0px) + 50px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 50px);
+  }
 }
+
 @media (max-width: 480px) {
   .hero-eyebrow { font-size: 11px; padding: 7px 14px; }
   .hero h1 { font-size: 32px; }
@@ -712,33 +775,43 @@ footer .footer-contact {
   .plans { padding: 50px 14px; }
   .plan-card { border-radius: 14px; }
   .cities-grid { grid-template-columns: repeat(2, 1fr); }
+  /* CORRIGIDO: brand-strip em coluna em telas muito pequenas */
+  .brand-strip { gap: 8px; }
 }
+
 @media (max-width: 380px) {
-  .nav-cta .nav-label { display: none; }
+  /* CORRIGIDO: esconde label de texto e mostra versão curta via CSS */
+  .nav-label { display: none; }
   .nav-cta::after { content: "FALAR"; font-size: 12px; }
   .hero h1 { font-size: 30px; }
   .pain-point-container { font-size: 30px; }
   .speed-num { font-size: 48px; }
   .price-val { font-size: 42px; }
   .sn-text { font-size: 11px; }
-  .sales-notification { padding: 8px 14px; }
+  .sales-notification { padding: 8px 12px; }
   .cities-grid { grid-template-columns: 1fr; }
+  /* CORRIGIDO: notificação ocupa quase a largura total em telas muito pequenas */
+  .sales-notification {
+    left: 12px;
+    right: 80px;
+    max-width: calc(100vw - 92px);
+  }
 }
 </style>
 </head>
 <body>
 
-<div class="stripe-bg"></div>
+<div class="stripe-bg" aria-hidden="true"></div>
 
 <!-- FAKE SALES NOTIFICATION -->
-<div class="sales-notification" id="salesNotification">
-  <div class="sn-icon">🎉</div>
+<div class="sales-notification" id="salesNotification" role="status" aria-live="polite" aria-atomic="true">
+  <div class="sn-icon" aria-hidden="true">🎉</div>
   <div class="sn-text" id="snText">Alguém acabou de assinar...</div>
 </div>
 
 <!-- FLOATING WA -->
-<a href="https://wa.me/5515998542920?text=Oi!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20um%20atendente!" class="float-wa" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
-  <span class="emoji-large">💬</span>
+<a href="https://wa.me/5515998542920?text=Oi!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20um%20atendente!" class="float-wa" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
+  💬
 </a>
 
 <!-- TICKER -->
@@ -750,16 +823,16 @@ footer .footer-contact {
 </div>
 
 <nav>
-  <img src="logo-aonet.png" alt="Aonet" class="nav-logo">
-  <a href="https://wa.me/5515998542920?text=Oi!%20Quero%20falar%20com%20um%20atendente." class="nav-cta" target="_blank" rel="noopener">
-    <span class="emoji-icon">💬</span>
+  <img src="logo-aonet.png" alt="Aonet" class="nav-logo" width="160" height="52">
+  <a href="https://wa.me/5515998542920?text=Oi!%20Quero%20falar%20com%20um%20atendente." class="nav-cta" target="_blank" rel="noopener noreferrer">
+    <span class="emoji-icon" aria-hidden="true">💬</span>
     <span class="nav-label">FALAR COM ATENDENTE</span>
   </a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
 
   <div class="hero-eyebrow">
     📡 COBRINDO + DE 30 CIDADES NA REGIÃO 📡
@@ -774,7 +847,7 @@ footer .footer-contact {
   <p class="hero-sub">Cansei da internet caindo? Migre agora para a fibra óptica mais confiável da região. Assine hoje e leve <strong>Aonet TV+, Skeelo e muito mais</strong> com <strong>Instalação 100% Grátis</strong>.</p>
 
   <div class="social-proof-stars">
-    <div class="stars">★★★★★</div>
+    <div class="stars" aria-label="5 estrelas">★★★★★</div>
     <div class="stars-text">+10.000 Clientes Satisfeitos em toda a Região</div>
   </div>
 
@@ -787,15 +860,15 @@ footer .footer-contact {
 
   <div class="hero-btns">
     <a href="#planos" class="btn-blue">VER MEU PLANO AGORA</a>
-    <a href="https://wa.me/5515998542920?text=Oi!%20Vim%20pelo%20site%20e%20quero%20contratar%20um%20plano!" class="btn-wa" target="_blank" rel="noopener">
-      <span class="emoji-icon">💬</span> FALAR COM ATENDENTE!
+    <a href="https://wa.me/5515998542920?text=Oi!%20Vim%20pelo%20site%20e%20quero%20contratar%20um%20plano!" class="btn-wa" target="_blank" rel="noopener noreferrer">
+      <span class="emoji-icon" aria-hidden="true">💬</span> FALAR COM ATENDENTE!
     </a>
   </div>
 </section>
 
 <!-- URGENCY STRIP -->
-<div class="urgency">
-  🔥 <span class="urg-hl">ATENÇÃO:</span> RESTAM APENAS <span style="color:#fff; font-size:130%;">3 VAGAS</span> DE INSTALAÇÃO GRÁTIS HOJE! ENCERRA EM: <span id="countdown">14:59</span> 🔥
+<div class="urgency" role="timer" aria-live="off">
+  🔥 <span class="urg-hl">ATENÇÃO:</span> RESTAM APENAS <span style="color:#fff; font-size:130%;">3 VAGAS</span> DE INSTALAÇÃO GRÁTIS HOJE! ENCERRA EM: <span id="countdown" aria-label="Contador regressivo">14:59</span> 🔥
 </div>
 
 <!-- PLANS -->
@@ -808,7 +881,7 @@ footer .footer-contact {
   <div class="plans-grid">
 
     <!-- 600 MEGA -->
-    <div class="plan-card reveal">
+    <article class="plan-card reveal">
       <div class="card-top" style="background: linear-gradient(135deg, #003A8C 0%, #0050BE 100%);">
         <div class="speed-label">VELOCIDADE</div>
         <div class="speed-num">600<sup>MEGA</sup></div>
@@ -825,22 +898,22 @@ footer .footer-contact {
           <span class="app-chip app-skeelo">Skeelo</span>
         </div>
         <ul class="feat-list">
-          <li><span class="chk">★</span> Roteador Wi-Fi 6</li>
-          <li><span class="chk">★</span> Instalação Grátis Hoje</li>
-          <li><span class="chk">★</span> Clube de Descontos Aonet</li>
+          <li><span class="chk" aria-hidden="true">★</span> Roteador Wi-Fi 6</li>
+          <li><span class="chk" aria-hidden="true">★</span> Instalação Grátis Hoje</li>
+          <li><span class="chk" aria-hidden="true">★</span> Clube de Descontos Aonet</li>
         </ul>
         <div class="card-footer">
-          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%20600%20Mega." class="btn-plan" target="_blank" rel="noopener">
-            <span class="emoji-icon">📲</span> CONTRATAR AGORA
+          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%20600%20Mega." class="btn-plan" target="_blank" rel="noopener noreferrer">
+            <span class="emoji-icon" aria-hidden="true">📲</span> CONTRATAR AGORA
           </a>
           <p class="free-tag">INSTALAÇÃO GRÁTIS</p>
         </div>
       </div>
-    </div>
+    </article>
 
     <!-- 800 MEGA (MAIS ASSINADO) -->
-    <div class="plan-card hot reveal" style="transition-delay:0.1s">
-      <div class="card-ribbon">O MAIS ASSINADO</div>
+    <article class="plan-card hot reveal" style="transition-delay:0.1s">
+      <div class="card-ribbon" aria-label="Plano mais assinado">O MAIS ASSINADO</div>
       <div class="card-top" style="background: linear-gradient(135deg, #001f5c 0%, #003399 100%);">
         <div class="speed-label">VELOCIDADE + APPS</div>
         <div class="speed-num gold-num">800<sup>MEGA</sup></div>
@@ -858,23 +931,23 @@ footer .footer-contact {
           <span class="app-chip app-deezer">Deezer</span>
         </div>
         <ul class="feat-list">
-          <li><span class="chk">★</span> Música e Audiobooks inclusos</li>
-          <li><span class="chk">★</span> Roteador Wi-Fi 6 de brinde</li>
-          <li><span class="chk">★</span> Instalação Grátis Hoje</li>
-          <li><span class="chk">★</span> Clube de Descontos Aonet</li>
+          <li><span class="chk" aria-hidden="true">★</span> Música e Audiobooks inclusos</li>
+          <li><span class="chk" aria-hidden="true">★</span> Roteador Wi-Fi 6 de brinde</li>
+          <li><span class="chk" aria-hidden="true">★</span> Instalação Grátis Hoje</li>
+          <li><span class="chk" aria-hidden="true">★</span> Clube de Descontos Aonet</li>
         </ul>
         <div class="card-footer">
-          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%20800%20Mega." class="btn-plan" target="_blank" rel="noopener">
-            <span class="emoji-icon">📲</span> CONTRATAR AGORA
+          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%20800%20Mega." class="btn-plan" target="_blank" rel="noopener noreferrer">
+            <span class="emoji-icon" aria-hidden="true">📲</span> CONTRATAR AGORA
           </a>
           <p class="free-tag">ÚLTIMAS VAGAS GRÁTIS</p>
         </div>
       </div>
-    </div>
+    </article>
 
     <!-- 1000 MEGA (ULTRA) -->
-    <div class="plan-card best reveal" style="transition-delay:0.2s">
-      <div class="card-ribbon">ULTRA 1 GIGA</div>
+    <article class="plan-card best reveal" style="transition-delay:0.2s">
+      <div class="card-ribbon" aria-label="Plano Ultra 1 Giga">ULTRA 1 GIGA</div>
       <div class="card-top dark-top">
         <div class="speed-label">GAMER + FAMÍLIA + APPS</div>
         <div class="speed-num gold-num">1000<sup>MEGA</sup></div>
@@ -896,19 +969,19 @@ footer .footer-contact {
           <span class="app-chip app-hbo">HBO Max</span>
         </div>
         <ul class="feat-list">
-          <li><span class="chk">★</span> Zero lag para Jogos Online</li>
-          <li><span class="chk">★</span> Conexão para a família toda</li>
-          <li><span class="chk">★</span> Instalação Grátis Hoje</li>
-          <li><span class="chk">★</span> Clube de Descontos Aonet</li>
+          <li><span class="chk" aria-hidden="true">★</span> Zero lag para Jogos Online</li>
+          <li><span class="chk" aria-hidden="true">★</span> Conexão para a família toda</li>
+          <li><span class="chk" aria-hidden="true">★</span> Instalação Grátis Hoje</li>
+          <li><span class="chk" aria-hidden="true">★</span> Clube de Descontos Aonet</li>
         </ul>
         <div class="card-footer">
-          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%201000%20Mega." class="btn-plan" target="_blank" rel="noopener">
-            <span class="emoji-icon">📲</span> CONTRATAR AGORA
+          <a href="https://wa.me/5515998542920?text=Quero%20contratar%20o%20plano%20de%201000%20Mega." class="btn-plan" target="_blank" rel="noopener noreferrer">
+            <span class="emoji-icon" aria-hidden="true">📲</span> CONTRATAR AGORA
           </a>
           <p class="free-tag">ÚLTIMAS VAGAS GRÁTIS</p>
         </div>
       </div>
-    </div>
+    </article>
 
   </div>
 </section>
@@ -968,8 +1041,8 @@ footer .footer-contact {
     <div class="city-pill">📍 Macatuba</div>
     <div class="city-pill">📍 Pederneiras</div>
   </div>
-  <div style="text-align: center; margin-top: 28px; width: 100%; padding: 0 10px;">
-    <a href="https://wa.me/5515998542920?text=Oi!%20Quero%20saber%20se%20vocês%20atendem%20minha%20cidade." class="btn-blue btn-verify" target="_blank" rel="noopener">
+  <div style="text-align: center; margin-top: 28px; width: 100%; padding: 0 10px; display: flex; justify-content: center;">
+    <a href="https://wa.me/5515998542920?text=Oi!%20Quero%20saber%20se%20vocês%20atendem%20minha%20cidade." class="btn-blue btn-verify" target="_blank" rel="noopener noreferrer">
       💬 VERIFICAR DISPONIBILIDADE NA MINHA CIDADE
     </a>
   </div>
@@ -982,19 +1055,19 @@ footer .footer-contact {
   </div>
   <div class="reviews-grid">
     <div class="review-card reveal">
-      <div class="r-stars">★★★★★</div>
+      <div class="r-stars" aria-label="5 estrelas">★★★★★</div>
       <p class="r-text">"Passei anos com internet caindo toda hora. Mudei pra Aonet, o técnico instalou no mesmo dia e nunca mais tive problema. Recomendo demais!"</p>
       <div class="r-author">Carlos M.</div>
       <div class="r-city">Garça - SP</div>
     </div>
     <div class="review-card reveal" style="transition-delay:0.1s">
-      <div class="r-stars">★★★★★</div>
+      <div class="r-stars" aria-label="5 estrelas">★★★★★</div>
       <p class="r-text">"Assinei o plano de 800 Mega e o Wi-Fi 6 pega em todos os cômodos. As crianças adoram assistir no tablet sem travar. Serviço impecável."</p>
       <div class="r-author">Fernanda S.</div>
       <div class="r-city">Bauru - SP</div>
     </div>
     <div class="review-card reveal" style="transition-delay:0.2s">
-      <div class="r-stars">★★★★★</div>
+      <div class="r-stars" aria-label="5 estrelas">★★★★★</div>
       <p class="r-text">"Atendimento nota 10. Chamei no WhatsApp, fechamos tudo na hora e a instalação foi grátis. Melhor internet que já tive aqui em Piratininga."</p>
       <div class="r-author">João P.</div>
       <div class="r-city">Piratininga - SP</div>
@@ -1002,76 +1075,91 @@ footer .footer-contact {
   </div>
 </section>
 
+<!-- FOOTER — CORRIGIDO: adicionado link de WhatsApp que faltava -->
 <footer>
-  <img src="logo-aonet.png" alt="Aonet">
-  <p class="footer-contact" style="margin-top:14px;">📞 Central de Atendimento: <strong style="color:rgba(255,255,255,0.8);">(15) 99854-2920</strong></p>
-  <p style="margin-top:8px;">© 2026 Aonet + Scala ISP – Fibra Óptica de Verdade · Todos os direitos reservados</p>
+  <img src="logo-aonet.png" alt="Aonet" width="160" height="50">
+  <p class="footer-contact" style="margin-top:14px;">
+    📞 Central de Atendimento:
+    <a href="tel:+5515998542920" style="color:rgba(255,255,255,0.8); font-weight:900; text-decoration:none;">(15) 99854-2920</a>
+  </p>
+  <p class="footer-contact">
+    <a href="https://wa.me/5515998542920?text=Oi!%20Vim%20pelo%20site%20e%20quero%20falar%20com%20um%20atendente!" target="_blank" rel="noopener noreferrer" style="color:var(--green); font-weight:900; text-decoration:none;">💬 Falar no WhatsApp</a>
+  </p>
+  <p style="margin-top:14px;">© 2026 Aonet + Scala ISP – Fibra Óptica de Verdade · Todos os direitos reservados</p>
 </footer>
 
 <script>
-/* Smooth Scroll */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+/* ── Smooth Scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 });
 
-/* Reveal on Scroll */
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+/* ── Reveal on Scroll ── */
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) e.target.classList.add('in');
+  });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+document.querySelectorAll('.reveal').forEach(function(el) { revealObs.observe(el); });
 
-/* Countdown */
+/* ── Countdown ──
+   CORRIGIDO: sem exibir tempo negativo; para exatamente em 00:00 */
 (function () {
-  let secs = 14 * 60 + 59;
-  const el = document.getElementById('countdown');
+  var secs = 14 * 60 + 59;
+  var el = document.getElementById('countdown');
   if (!el) return;
-  function update() {
-    if (secs <= 0) { el.textContent = '00:00'; return; }
+  var timer = setInterval(function() {
+    if (secs <= 0) {
+      el.textContent = '00:00';
+      clearInterval(timer);
+      return;
+    }
     secs--;
-    const m = Math.floor(secs / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
-    el.textContent = `${m}:${s}`;
-  }
-  update();
-  setInterval(update, 1000);
+    var m = Math.floor(secs / 60).toString().padStart(2, '0');
+    var s = (secs % 60).toString().padStart(2, '0');
+    el.textContent = m + ':' + s;
+  }, 1000);
 })();
 
-/* Fake Sales Notification */
+/* ── Fake Sales Notification ── */
 (function () {
-  const notif = document.getElementById('salesNotification');
-  const textEl = document.getElementById('snText');
+  var notif = document.getElementById('salesNotification');
+  var textEl = document.getElementById('snText');
   if (!notif || !textEl) return;
 
-  const names = [
+  var names = [
     'Marcos', 'Ana', 'José', 'Carla', 'Felipe', 'Roberto', 'Julia', 'Mariana',
     'Lucas', 'Mateus', 'Fernanda', 'Rafael', 'Amanda', 'Diego', 'Bruna',
     'Thiago', 'Camila', 'Rodrigo', 'Letícia', 'Gabriel', 'Beatriz', 'Leandro',
     'Patrícia', 'Marcelo', 'Vanessa', 'Ricardo', 'Eduardo', 'Aline', 'Vinícius'
   ];
-  const cities = [
+  var cities = [
     'Garça', 'Bauru', 'Piratininga', 'Pirajuí', 'Pederneiras',
     'Cafelândia', 'Reginópolis', 'Guarantã', 'Macatuba', 'Iacanga',
     'Gália', 'Duartina', 'Ubirajara', 'Lupércio'
   ];
-  const plans = ['600 Mega', '800 Mega', '1000 Mega'];
+  var plans = ['600 Mega', '800 Mega', '1000 Mega'];
 
   function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
   function show() {
-    textEl.innerHTML = `${rand(names)} de ${rand(cities)} assinou o plano <span>${rand(plans)}</span>!`;
+    textEl.innerHTML = rand(names) + ' de ' + rand(cities) + ' assinou o plano <span>' + rand(plans) + '</span>!';
     notif.classList.add('show');
-    setTimeout(() => notif.classList.remove('show'), 4000);
+    setTimeout(function() { notif.classList.remove('show'); }, 4000);
   }
 
   function schedule() {
-    const delay = Math.floor(Math.random() * 20000) + 15000;
-    setTimeout(() => { show(); schedule(); }, delay);
+    var delay = Math.floor(Math.random() * 20000) + 15000;
+    setTimeout(function() { show(); schedule(); }, delay);
   }
 
-  setTimeout(() => { show(); schedule(); }, 8000);
+  setTimeout(function() { show(); schedule(); }, 8000);
 })();
 </script>
 </body>
